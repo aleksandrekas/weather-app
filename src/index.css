@@ -26,6 +26,9 @@ body{
     align-items: center;
 }
 
+.dropDownContainer{
+    position: relative;
+}
 
 
 .dropDownbtn{
@@ -33,13 +36,26 @@ body{
     justify-content: space-evenly;
     align-items: center;
     padding: 0.7rem;
-    background-color: var(--background-gray);
+    background-color: var(--neutral-800);
     color: var(--font-color);
     height: 43px;
     border: none;
     border-radius: 5px;
+    color: var(--neutral-0);
+    cursor: pointer;
 }
 
 .units{
     width: 112px;
+}
+
+
+.options{
+    width: 214px;
+    height: 412px;
+    background-color: var(--neutral-800);
+    border-radius:6px;
+    position: absolute;
+    top: 50px;
+    right: 0;
 }
