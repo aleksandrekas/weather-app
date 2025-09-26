@@ -4,6 +4,11 @@ import { useState } from "react";
 
 export default function Units(){
     const [open,setOpen] = useState(false)
+    const [options,setOptions] = useState({
+        temperature:false,
+        speed:false,
+        precipitation:false
+    })
 
     function toggle(){
         setOpen(!open)
@@ -17,7 +22,8 @@ export default function Units(){
                 <img src={dropDownIcon} alt="dropDown-icon" />
             </button>
             <div className="options" style={{display: open? "block" : "none"}} >
-                
+                <h4>Switch to imperial</h4>
+
             </div>
         </div>
     )
