@@ -64,4 +64,45 @@ body{
     right: 0;
     padding: 0.7rem;
     color: var(--neutral-0);
+    display: flex;
+    flex-direction: column;
+}
+
+.options h4{
+    font-size: 0.8rem;
+    font-weight: 400;
+}
+
+.option_sections{
+    width: 100%;
+}
+
+.section_container{
+    width: 100%;
+    height: 115px;
+    border-bottom: 1px solid var(--neutral-600);
+    display: flex;
+    flex-direction: column;
+    margin: 1rem 0;
+}
+
+.section_container h6{
+    color: var(--neutral-300);
+    font-weight: 500;
+    margin: 0 0.8rem;
+}
+
+
+.sections_button{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 40px;
+    padding: 1rem 0.5rem;
+    border-radius: 6px;
+    background-color: var(--neutral-800);
+    border: none;
+    color: var(--neutral-0);
+    font-size: 1rem;
+    cursor: pointer;
 }
