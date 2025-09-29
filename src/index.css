@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
 *{
     box-sizing: border-box;
@@ -105,4 +105,79 @@ body{
     color: var(--neutral-0);
     font-size: 1rem;
     cursor: pointer;
+}
+
+.appContainer{
+    width: 100vw;
+    padding: 2rem 5rem;
+}
+
+.header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+
+
+/* searchbar styles */
+
+.searchBar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 8rem 0 0 0;
+    
+}
+
+.searchBar h1{
+    color: var(--neutral-0);
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: 3.2rem;
+    
+}
+
+.searchBar input{
+    border-radius: 10px;
+}
+
+.searchForm{
+    position: relative;
+    margin: 2rem;
+}
+
+.searchForm :nth-child(1) {
+    width: 500px;
+    height: 50px;
+    background-color: var(--neutral-800);
+    border: none;
+    padding: 0 0 0 3rem;
+    color: var(--neutral-0);
+    font-size: 1rem;
+    margin: 0 1rem 0 0;
+    outline: none;
+}
+.searchForm :nth-child(1)::placeholder{
+    color: var(--neutral-200);
+}
+
+
+
+
+.searchForm :nth-child(2) {
+    width: 100px;
+    height: 50px;
+    background-color: var(--blue-500);
+    color: var(--neutral-0);
+    border: none;
+    font-size: 1rem;
+}
+
+
+.searchForm img{
+    position: absolute;
+    left: 15px;
+    top: 15px;
 }
