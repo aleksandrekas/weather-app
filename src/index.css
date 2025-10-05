@@ -147,7 +147,7 @@ body{
     margin: 2rem;
 }
 
-.searchForm :nth-child(1) {
+.searchFormInput {
     width: 500px;
     height: 50px;
     background-color: var(--neutral-800);
@@ -158,14 +158,14 @@ body{
     margin: 0 1rem 0 0;
     outline: none;
 }
-.searchForm :nth-child(1)::placeholder{
+.searchFormInput::placeholder{
     color: var(--neutral-200);
 }
 
 
 
 
-.searchForm :nth-child(2) {
+.submitBtn {
     width: 100px;
     height: 50px;
     background-color: var(--blue-500);
@@ -175,7 +175,7 @@ body{
 }
 
 
-.searchForm img{
+.searchIcon{
     position: absolute;
     left: 15px;
     top: 15px;
@@ -186,10 +186,14 @@ body{
     width: 500px;
     background-color: var(--neutral-800);
     color: var(--neutral-0);
-    border-radius: 6px;
+    border-radius: 10px;
     position: absolute;
     left: 0;
-    top: 10;
+    top: 60px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 0.1rem 0.5rem;
     
 }
 
@@ -213,8 +217,49 @@ body{
 
 
 .city{
-    width: 480px;
+    width: 100%;
     height: 40px;
-    background-color: var(--neutral-700);
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 0.4rem;
+    font-size: 0.7rem !important;
+    padding: 0 0.6rem;
+    cursor: pointer;
     border-radius: 6px;
+}
+
+
+.city:hover{
+    background-color: var(--neutral-700);
+}
+
+.searching{
+    width: 100%;
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.searching img{
+    margin: 0  0.5rem;
+    animation: rotation 2s linear infinite;
+
+}
+
+
+.searching h4{
+    font-weight: 300;
+}
+
+
+@keyframes rotation {
+    50%{
+        transform: rotate(180deg);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
 }
