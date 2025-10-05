@@ -1,6 +1,9 @@
 import Units from "./components/Units"
 import Logo from "./assets/icons/Logo.svg"
 import SearchBar from "./components/SearchBar"
+import WeatherBar from "./components/WeatherBar"
+
+
 
 function App() {
    return (
@@ -10,6 +13,7 @@ function App() {
         <Units/>
       </header>
       <SearchBar />
+      <WeatherBar />
     </div>
   )
 }

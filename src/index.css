@@ -108,8 +108,9 @@ body{
 }
 
 .appContainer{
-    width: 100vw;
-    padding: 2rem 5rem;
+    width: 100dvw;
+    max-width: 1650px;
+    padding: 2rem 1rem;
 }
 
 .header{
@@ -262,4 +263,35 @@ body{
     100%{
         transform: rotate(360deg);
     }
+}
+
+
+
+/* weatherbar styles */
+
+.holder{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    border: 2px solid red;
+}
+
+
+.leftSideInfo{
+    width: 1000px;
+    height: 700px;
+    border: 2px solid green;
+}
+
+
+
+
+
+.hourlyForecast{
+    width: 500px;
+    height: 700px;
+    border: 2px solid yellow;
 }
