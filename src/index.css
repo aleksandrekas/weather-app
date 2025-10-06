@@ -276,7 +276,6 @@ body{
     flex-direction: row;
     align-items: center;
     flex-wrap: wrap;
-    border: 2px solid red;
 }
 
 
@@ -291,7 +290,75 @@ body{
 
 
 .hourlyForecast{
-    width: 500px;
+    width: 400px;
     height: 700px;
-    border: 2px solid yellow;
+    border-radius: 10px;
+    padding: 24px;
+    background-color: var(--neutral-800);
+}
+
+
+
+.daySelector{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    position: relative;
+}
+
+.daySelector p{
+    color: var(--neutral-0);
+    font-size: 1.1rem;
+}
+
+.days{
+    width: 130px;
+    height: 37px;
+    background-color: var(--neutral-600);
+    border-radius: 10px;
+    justify-content: space-between;
+}
+
+.days p{
+    font-size: 1rem;
+    margin: 0 10px 0 0;
+}
+
+.days_options{
+    width: 212px;
+    height: 313px;
+    background-color: var(--neutral-800);
+    border-radius: 10px;
+    padding: 0.5rem;
+    position: absolute;
+    border: 1px solid var(--neutral-600);
+    right: 0;
+    top: 50px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: column;
+}
+
+.weekDay{
+    width: 100%;
+    height: 39px;
+    text-align: start;
+    border-radius: 6px;
+    border: none;
+    color: var(--neutral-0);
+    background-color: var(--neutral-800);
+    font-size: 1rem;
+    letter-spacing: 1px;
+    padding: 0.5rem;
+    cursor: pointer;
+}
+
+.weekDay:hover{
+    background-color: var(--neutral-700);
+}
+
+.selected{
+    background-color: var(--neutral-700);
 }
