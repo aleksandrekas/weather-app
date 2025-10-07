@@ -271,8 +271,9 @@ body{
 
 .holder{
     width: 100%;
+
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     flex-direction: row;
     align-items: center;
     flex-wrap: wrap;
@@ -280,7 +281,7 @@ body{
 
 
 .leftSideInfo{
-    width: 1000px;
+    width: 800px;
     height: 700px;
     border: 2px solid green;
 }
@@ -361,4 +362,39 @@ body{
 
 .selected{
     background-color: var(--neutral-700);
+}
+
+
+.forecast{
+    width: 100%;
+    height: 286px;
+    position: relative;
+    background-image: url(../src/assets/background/Desktop\ -\ Hero\ bg.svg) ;
+    background-size: cover;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--neutral-0);
+    padding: 0 3rem;
+}
+
+.sun_temp{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sun_temp img{
+    position: relative;
+    width: 120px;
+}
+
+.sun_temp p{
+    font-size: 5rem;
+    font-weight: 700;
+}
+
+.sun_temp p sup{
+    font-size: 3rem;
+    margin: 0.5rem;
 }
