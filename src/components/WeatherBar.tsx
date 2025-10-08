@@ -1,5 +1,4 @@
 import dropDownIcon from "../assets/icons/Units Dropdown Icon.svg"
-import background from "../assets/background/Desktop - Hero bg.svg"
 import { useState } from "react"
 import sunny from "../assets/weather/Clear-sunny.png"
 
@@ -32,12 +31,23 @@ export default function WeatherBar(){
                     </div>
                 </div>
                 <div className="detailedForecast">
-                    <div className="feelsLike">
-
-                    </div>
-
+                    <DetailedForecastItem section="Humidity" data="46%" />
+                    <DetailedForecastItem section="Humidity" data="46%" />
+                    <DetailedForecastItem section="Humidity" data="46%" />
+                    <DetailedForecastItem section="Humidity" data="46%" />
                 </div>
-                <div className="dailyForecast"></div>
+                <div className="dailyForecastWrapper">
+                    <h1 className="dailyForecastTitle">Daily Forecast</h1>
+                    <div className="dailyForecast">
+                        <DailyForecastItem />
+                        <DailyForecastItem />
+                        <DailyForecastItem />
+                        <DailyForecastItem />
+                        <DailyForecastItem />
+                        <DailyForecastItem />
+                        <DailyForecastItem />
+                    </div>
+                </div>
             </div>
             <div className="hourlyForecast">
                 <div className="daySelector">
@@ -73,11 +83,26 @@ function DayButton({day,callback,state}:{day:string,callback:any,state:string}){
 
 
 
-function DetailedForecastItem(){
+function DetailedForecastItem({section,data}:{section:string,data:string}){
     return (
         <div className="forecastItem">
-            <h5></h5>
-            <p></p>
+            <h5>{section}</h5>
+            <p>{data}</p>
+        </div>
+    )
+}
+
+
+
+function DailyForecastItem(){
+    return(
+        <div className="dailyForecastItem">
+            <h1>Mon</h1>
+            <img src="src/assets/weather/Clear-sunny.png" alt="" />
+            <div className="temp">
+                <p>20</p>
+                <p>15</p>
+            </div>
         </div>
     )
 }

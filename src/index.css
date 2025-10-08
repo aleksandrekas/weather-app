@@ -130,6 +130,7 @@ body{
     align-items: center;
     flex-direction: column;
     margin: 8rem 0 0 0;
+    z-index: 12;
 }
 
 .searchBar h1{
@@ -195,6 +196,7 @@ body{
     align-items: center;
     flex-direction: column;
     padding: 0.1rem 0.5rem;
+    z-index: 1;
     
 }
 
@@ -270,20 +272,20 @@ body{
 /* weatherbar styles */
 
 .holder{
-    width: 100%;
-
+    width: 90%;
     display: flex;
     justify-content: space-evenly;
     flex-direction: row;
     align-items: center;
     flex-wrap: wrap;
+    margin: 2rem auto;
+    z-index: 1;
 }
 
 
 .leftSideInfo{
     width: 800px;
     height: 700px;
-    border: 2px solid green;
 }
 
 
@@ -397,4 +399,79 @@ body{
 .sun_temp p sup{
     font-size: 3rem;
     margin: 0.5rem;
+}
+
+.detailedForecast{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin: 2rem 0;
+}
+
+
+.forecastItem{
+    width: 182px;
+    height: 118px;
+    background-color: var(--neutral-800);
+    color: var(--neutral-0);
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: space-between;
+    padding: 1.2rem;
+    border-radius: 10px;
+    font-size: 1.6rem;
+    font-weight: 300;
+    border: 1px solid var(--neutral-600);
+}
+
+.forecastItem h5{
+    font-weight: 200;
+    font-size: 1rem;
+}
+
+.dailyForecast{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dailyForecastItem{
+    width: 100px;
+    height: 165px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    background-color: var(--neutral-800);
+    color: var(--neutral-0);
+    border-radius: 10px;
+    padding: 1rem;
+    border: 1px solid var(--neutral-600);
+}
+
+
+.dailyForecastItem img{
+    width: 60px;
+}
+
+.dailyForecastItem h1{
+    font-size: 1.1rem;
+    font-weight: 400;
+}
+
+.dailyForecastItem .temp{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+
+
+.dailyForecastWrapper .dailyForecastTitle{
+    color: var(--neutral-0);
+    font-size: 1.2rem;
+    font-weight: 400;
+    margin: 3.5rem 0 1rem 0;
 }
