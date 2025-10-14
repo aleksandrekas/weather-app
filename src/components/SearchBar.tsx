@@ -1,26 +1,46 @@
 import searchIcon from "../assets/icons/Search Icon.svg"
 import loading from "../assets/icons/loading.svg"
 import { useEffect, useState } from "react"
+import { useSelector,useDispatch } from "react-redux"
+import { setLocation } from "../store/locationSlice"
+
 import CityBar from "./CityBar"
 type CityType = {
     name : string;
     lat: number;
     long:number
 }
-
+``
 
 
 export default function SearchBar(){
     const [city,setCity] = useState('')
     const [cityNames,setCityNames] = useState<CityType[]>([])
     const [focus,setFocus] = useState<Boolean>(false)
-    
+    const dispatch = useDispatch()
+    const cityState = useSelector((state:any) => state.location)
 
     function handleInputChange(e:React.ChangeEvent<HTMLInputElement>){
         setCity(e.target.value)
         setFocus(true)
     }
 
+
+    function focusChange(){
+        setCity('')
+        setFocus(false)
+    }
+
+    useEffect(()=>{ 
+        navigator.geolocation.getCurrentPosition((position)=>{
+            dispatch(setLocation({
+                lat:position.coords.latitude,
+                lon:position.coords.longitude
+            }))
+        })
+        console.log("initial city added")
+
+    },[])
 
 
 
@@ -43,6 +63,7 @@ export default function SearchBar(){
                         long: item.properties.lon,
                         }))
                     );
+                    
     
                 }catch(err){
                     console.error(err)
@@ -52,21 +73,18 @@ export default function SearchBar(){
                     setFocus(false)
             }
         })()
-
-
-
- 
     },[city])
 
-
-    console.log(cityNames)
+useEffect(() => {
+  console.log("City state changed:", JSON.stringify(cityState))
+}, [cityState])
 
 
     return(
         <div className="searchBar">
             <h1>How's the sky looking today?</h1>
             <form className="searchForm">
-                <input onBlur={()=>{setFocus(false)}} className="searchFormInput" onChange={handleInputChange} type="text" placeholder="Search for a place..." />
+                <input name="cityInput" className="searchFormInput" onChange={handleInputChange} type="text" placeholder="Search for a place..." value={city}/>
                 <input  className="submitBtn" type="submit" value="Search" />
                 <img className="searchIcon" src={searchIcon} alt="" />
                 <div className="searchResultContainer" style={{display: !focus ? 'none' : 'flex'}}>
@@ -77,7 +95,7 @@ export default function SearchBar(){
                         </div>
                     :
                         cityNames.map((item,index)=>(
-                            <CityBar key={index} name={item.name} lat={item.lat} lon={item.long} />
+                            <CityBar key={index} name={item.name} lat={item.lat} lon={item.long} method = {focusChange} />
                         ))}
                 </div>
             </form>
