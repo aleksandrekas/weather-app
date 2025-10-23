@@ -1,13 +1,10 @@
-import { configureStore } from "@reduxjs/toolkit";
-import locationSlice from "./locationSlice"
-import unitSlice from "../components/Units";
-
-
-
+import { configureStore } from "@reduxjs/toolkit"
+import locationReducer from "./locationSlice"
+import unitReducer from "./unitSlice" 
 
 export const store = configureStore({
-    reducer:{
-        location:locationSlice,
-        units:unitSlice
-    }
+  reducer: {
+    location: locationReducer,
+    unit: unitReducer, 
+  },
 })

@@ -2,6 +2,7 @@ import units from "../assets/icons/Units Icon.svg";
 import dropDownIcon from "../assets/icons/Units Dropdown Icon.svg"
 import selected from "../assets/icons/done.svg";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 export default function Units(){
     const [open,setOpen] = useState(false)
@@ -10,6 +11,7 @@ export default function Units(){
         speed:"kmh",
         precipitation:"millimeters"
     })
+    const unitState = useSelector((state:any) => state.unit)
 
     function toggle(){
         setOpen(!open)
@@ -23,7 +25,6 @@ export default function Units(){
             [name]:value
         }))
     }
-
 
 
 

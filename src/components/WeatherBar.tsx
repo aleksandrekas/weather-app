@@ -1,18 +1,31 @@
 import dropDownIcon from "../assets/icons/Units Dropdown Icon.svg"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import sunny from "../assets/weather/Clear-sunny.png"
-
+import { useSelector } from "react-redux"
 
 
 export default function WeatherBar(){
     const [toggleSelector,SetSelector] = useState(false)
     const [selectedDay,setDay] = useState('Monday')
-
+    const location = useSelector((state:any) => state.location)
 
     function selectDay(e:React.MouseEvent<HTMLButtonElement>){
         setDay(e.currentTarget.value)
         SetSelector(false)
     }
+
+    async function fetchWeather(lat:number,lon:number){
+        const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}`)
+        const data = await response.json()
+
+        console.log(data)
+    }
+
+
+
+    useEffect(()=>{
+        fetchWeather(location.lat,location.lon)
+    },[location])
 
 
 

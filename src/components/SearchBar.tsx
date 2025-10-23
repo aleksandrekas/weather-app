@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { useSelector,useDispatch } from "react-redux"
 import { setLocation } from "../store/locationSlice"
 
+
 import CityBar from "./CityBar"
 type CityType = {
     name : string;
@@ -76,7 +77,7 @@ export default function SearchBar(){
     },[city])
 
 useEffect(() => {
-  console.log("City state changed:", JSON.stringify(cityState))
+  console.log("City state changed:", cityState)
 }, [cityState])
 
 

@@ -3,7 +3,7 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 type UnitKey = "temperature" | "speed" | "precipitation"
 
 const unitSlice = createSlice({
-    name:"units",
+    name:"unit",
     initialState:{
         temperature:"celcius",
         speed:"kmh",
@@ -15,6 +15,7 @@ const unitSlice = createSlice({
         }
     }
 })
+
 
 
 export const {changeunit} = unitSlice.actions
