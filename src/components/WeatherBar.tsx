@@ -8,17 +8,29 @@ export default function WeatherBar(){
     const [toggleSelector,SetSelector] = useState(false)
     const [selectedDay,setDay] = useState('Monday')
     const location = useSelector((state:any) => state.location)
-
+    
     function selectDay(e:React.MouseEvent<HTMLButtonElement>){
         setDay(e.currentTarget.value)
         SetSelector(false)
     }
 
-    async function fetchWeather(lat:number,lon:number){
-        const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}`)
-        const data = await response.json()
+    async function fetchWeather(lat: number, lon: number) {
+        try {
+            const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,temperature_2m_min&hourly=temperature_2m,is_day&current=temperature_2m,is_day,rain,precipitation,wind_speed_10m,cloud_cover&timezone=auto`;
 
-        console.log(data)
+            const response = await fetch(url.replace(/\s+/g, ""));
+           
+            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+
+            const data = await response.json();
+            
+
+            
+
+            return data;
+        } catch (err) {
+            console.error("Failed to fetch weather data:", err);
+        }
     }
 
 
@@ -29,13 +41,12 @@ export default function WeatherBar(){
 
 
 
-
     return(
         <div className="holder">
             <div className="leftSideInfo">
                 <div className="forecast" >              
                     <div className="cit_date">
-                        <h2>Berlin,Germany</h2>
+                        <h2>{location.name}</h2>
                         <p>Tuesday,Aug 5,2025</p>
                     </div>
                     <div className="sun_temp">
@@ -44,10 +55,10 @@ export default function WeatherBar(){
                     </div>
                 </div>
                 <div className="detailedForecast">
+                    <DetailedForecastItem section="Feels Like" data="46%" />
                     <DetailedForecastItem section="Humidity" data="46%" />
-                    <DetailedForecastItem section="Humidity" data="46%" />
-                    <DetailedForecastItem section="Humidity" data="46%" />
-                    <DetailedForecastItem section="Humidity" data="46%" />
+                    <DetailedForecastItem section="Wind" data="46%" />
+                    <DetailedForecastItem section="Precipitation" data="46%" />
                 </div>
                 <div className="dailyForecastWrapper">
                     <h1 className="dailyForecastTitle">Daily Forecast</h1>

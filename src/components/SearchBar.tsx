@@ -11,7 +11,6 @@ type CityType = {
     lat: number;
     long:number
 }
-``
 
 
 export default function SearchBar(){
@@ -33,10 +32,17 @@ export default function SearchBar(){
     }
 
     useEffect(()=>{ 
-        navigator.geolocation.getCurrentPosition((position)=>{
+        navigator.geolocation.getCurrentPosition(async(position)=>{
+            const latitude = position.coords.latitude
+            const longitude = position.coords.longitude
+            const citydata = await fetch(`https://api.geoapify.com/v1/geocode/reverse?lat=${latitude}&lon=${longitude}&apiKey=2e95952892144e7397ac3df304bce5a2`)
+            const cityName = await  citydata.json()
+
             dispatch(setLocation({
-                lat:position.coords.latitude,
-                lon:position.coords.longitude
+                lat:latitude,
+                lon:longitude,
+                name:`${cityName.features[0].properties.city},${cityName.features[0].properties.country}`
+
             }))
         })
         console.log("initial city added")
@@ -56,10 +62,9 @@ export default function SearchBar(){
                     })
     
                     const data = await cities.json()
-    
                     setCityNames(
                         data.features.map((item: any) => ({
-                        name: item.properties.formatted,
+                        name: `${item.properties.city},${item.properties.country}`,
                         lat: item.properties.lat,
                         long: item.properties.lon,
                         }))
@@ -76,9 +81,7 @@ export default function SearchBar(){
         })()
     },[city])
 
-useEffect(() => {
-  console.log("City state changed:", cityState)
-}, [cityState])
+
 
 
     return(
