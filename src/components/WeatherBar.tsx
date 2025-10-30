@@ -16,10 +16,19 @@ export default function WeatherBar(){
         temperature_2m_min: number[]
         weather_code: number[]
     }
+    type CurrentWeather = {
+        apparent_temperature:number
+        interval:number
+        precipitation:number
+        relative_humidity_2m:number
+        temperature_2m: number
+        time:string
+        wind_speed_10m:number
+    }
 
     type WeatherState = {
         daily: DailyWeather | null
-        current :any
+        current :CurrentWeather | null
     }
     const [toggleSelector,SetSelector] = useState(false)
     const [selectedDay,setDay] = useState('Monday')
@@ -39,17 +48,17 @@ export default function WeatherBar(){
 
     async function fetchWeather(lat: number, lon: number) {
         try {
-            const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,temperature_2m_min,weather_code&hourly=temperature_2m,is_day&current=temperature_2m,is_day,rain,precipitation,wind_speed_10m,cloud_cover&timezone=auto`;
+            const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,temperature_2m_min,weather_code&hourly=temperature_2m&current=temperature_2m,precipitation,wind_speed_10m,relative_humidity_2m,apparent_temperature&timezone=auto`;
 
             const response = await fetch(url.replace(/\s+/g, ""));
            
             if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
             const data = await response.json();
-            console.log(data)
+            // console.log(data)
             setWeather({
                 daily:data.daily,
-                current:null
+                current:data.current
             })
             return data;
         } catch (err) { 
@@ -62,6 +71,9 @@ export default function WeatherBar(){
     useEffect(()=>{
         fetchWeather(location.lat,location.lon)
     },[location])
+    useEffect(()=>{
+        console.log(weather.current)
+    },[weather])
 
 
 
@@ -75,14 +87,14 @@ export default function WeatherBar(){
                     </div>
                     <div className="sun_temp">
                         <img src={sunny} alt="sunny_weather"/>
-                        <p><i>20</i><sup>o</sup></p>
+                        <p><i>{weather.current!.temperature_2m}</i><sup>o</sup></p>
                     </div>
                 </div>
                 <div className="detailedForecast">
-                    <DetailedForecastItem section="Feels Like" data="46%" />
-                    <DetailedForecastItem section="Humidity" data="46%" />
-                    <DetailedForecastItem section="Wind" data="46%" />
-                    <DetailedForecastItem section="Precipitation" data="46%" />
+                    <DetailedForecastItem section="Feels Like" data={`${weather.current?.apparent_temperature}`} />
+                    <DetailedForecastItem section="Humidity" data={`${weather.current?.relative_humidity_2m}%`} />
+                    <DetailedForecastItem section="Wind" data={`${weather.current?.wind_speed_10m} Km/h`} />
+                    <DetailedForecastItem section="Precipitation" data={`${weather.current?.precipitation} mm`} />
                 </div>
                 <div className="dailyForecastWrapper">
                     <h1 className="dailyForecastTitle">Daily Forecast</h1>
