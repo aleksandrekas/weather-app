@@ -17,13 +17,13 @@ export default function WeatherBar(){
         weather_code: number[]
     }
     type CurrentWeather = {
-        apparent_temperature:number
-        interval:number
+        feelsLike:number
         precipitation:number
-        relative_humidity_2m:number
-        temperature_2m: number
+        humidity:number
+        temperature: number
         time:string
-        wind_speed_10m:number
+        windSpeed:number
+        formattedTime:string
     }
 
     type WeatherState = {
@@ -34,7 +34,15 @@ export default function WeatherBar(){
     const [selectedDay,setDay] = useState('Monday')
     const [weather,setWeather] = useState<WeatherState>({
         daily:null,
-        current:null
+        current:{
+            feelsLike: 0,
+            precipitation: 0,
+            humidity : 0,
+            temperature:0,
+            windSpeed: 0,
+            time:"",
+            formattedTime:""
+        }
     })
 
 
@@ -45,6 +53,11 @@ export default function WeatherBar(){
         setDay(e.currentTarget.value)
         SetSelector(false)
     }
+
+    function formatTime(time:string):string{
+        return new Date(time).toLocaleDateString("en-US",{weekday:"long",month:"short",day:"numeric",year:"numeric"})
+    }
+
 
     async function fetchWeather(lat: number, lon: number) {
         try {
@@ -58,7 +71,15 @@ export default function WeatherBar(){
             // console.log(data)
             setWeather({
                 daily:data.daily,
-                current:data.current
+                current:{
+                    feelsLike:data.current.apparent_temperature,
+                    precipitation:data.current.precipitation,
+                    humidity:data.current.relative_humidity_2m,
+                    temperature:data.current.temperature_2m,
+                    windSpeed:data.current.wind_speed_10m,
+                    time:data.current.time,
+                    formattedTime:formatTime(data.current.time)
+                }
             })
             return data;
         } catch (err) { 
@@ -80,20 +101,26 @@ export default function WeatherBar(){
     return(
         <div className="holder">
             <div className="leftSideInfo">
-                <div className="forecast" >              
-                    <div className="cit_date">
-                        <h2>{location.name}</h2>
-                        <p>Tuesday,Aug 5,2025</p>
-                    </div>
-                    <div className="sun_temp">
-                        <img src={sunny} alt="sunny_weather"/>
-                        <p><i>{weather.current!.temperature_2m}</i><sup>o</sup></p>
-                    </div>
+                <div className="forecast" >
+                    {weather.current === null ?
+                        <div>loading</div>
+                        :
+                        <>
+                            <div className="cit_date">
+                                <h2>{location.name}</h2>
+                                <p>{weather.current.formattedTime}</p>
+                            </div>
+                            <div className="sun_temp">
+                                <img src={sunny} alt="sunny_weather"/>
+                                <p><i>{weather.current!.temperature}</i><sup>o</sup></p>
+                            </div>
+                        </>
+                    }              
                 </div>
                 <div className="detailedForecast">
-                    <DetailedForecastItem section="Feels Like" data={`${weather.current?.apparent_temperature}`} />
-                    <DetailedForecastItem section="Humidity" data={`${weather.current?.relative_humidity_2m}%`} />
-                    <DetailedForecastItem section="Wind" data={`${weather.current?.wind_speed_10m} Km/h`} />
+                    <DetailedForecastItem section="Feels Like" data={`${weather.current?.feelsLike}`} />
+                    <DetailedForecastItem section="Humidity" data={`${weather.current?.humidity}%`} />
+                    <DetailedForecastItem section="Wind" data={`${weather.current?.windSpeed} Km/h`} />
                     <DetailedForecastItem section="Precipitation" data={`${weather.current?.precipitation} mm`} />
                 </div>
                 <div className="dailyForecastWrapper">
