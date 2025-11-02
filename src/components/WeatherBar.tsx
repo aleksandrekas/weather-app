@@ -1,9 +1,9 @@
-import dropDownIcon from "../assets/icons/Units Dropdown Icon.svg"
+
 import { useEffect, useState } from "react"
 import sunny from "../assets/weather/Clear-sunny.png"
 import { useSelector } from "react-redux"
 import DailyForecastItem from "./DailyForecastItem"
-
+import HourlyWeather from "./HourlyWeather"
 
 
 
@@ -26,12 +26,18 @@ export default function WeatherBar(){
         formattedTime:string
     }
 
+    type Hourly={
+        time:string[]
+        temperature: number[]
+        weather_code:number[]
+    }
+
     type WeatherState = {
         daily: DailyWeather | null
-        current :CurrentWeather | null
+        current :CurrentWeather
+        hourlyWeather:Hourly 
     }
-    const [toggleSelector,SetSelector] = useState(false)
-    const [selectedDay,setDay] = useState('Monday')
+
     const [weather,setWeather] = useState<WeatherState>({
         daily:null,
         current:{
@@ -42,6 +48,11 @@ export default function WeatherBar(){
             windSpeed: 0,
             time:"",
             formattedTime:""
+        },
+        hourlyWeather:{
+            time:[],
+            temperature:[],
+            weather_code:[]
         }
     })
 
@@ -49,10 +60,7 @@ export default function WeatherBar(){
 
     const location = useSelector((state:any) => state.location)
     
-    function selectDay(e:React.MouseEvent<HTMLButtonElement>){
-        setDay(e.currentTarget.value)
-        SetSelector(false)
-    }
+
 
     function formatTime(time:string):string{
         return new Date(time).toLocaleDateString("en-US",{weekday:"long",month:"short",day:"numeric",year:"numeric"})
@@ -61,15 +69,18 @@ export default function WeatherBar(){
 
     async function fetchWeather(lat: number, lon: number) {
         try {
-            const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,temperature_2m_min,weather_code&hourly=temperature_2m&current=temperature_2m,precipitation,wind_speed_10m,relative_humidity_2m,apparent_temperature&timezone=auto`;
+            const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,temperature_2m_min,weather_code&current=temperature_2m,precipitation,wind_speed_10m,relative_humidity_2m,apparent_temperature&timezone=auto`;
 
-            const response = await fetch(url.replace(/\s+/g, ""));
+
+            const response = await fetch(url);
            
             if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
             const data = await response.json();
-            // console.log(data)
-            setWeather({
+            console.log(data.current)
+
+            setWeather((prev)=>({
+                ...prev,
                 daily:data.daily,
                 current:{
                     feelsLike:data.current.apparent_temperature,
@@ -80,22 +91,46 @@ export default function WeatherBar(){
                     time:data.current.time,
                     formattedTime:formatTime(data.current.time)
                 }
-            })
+            }))
             return data;
         } catch (err) { 
             console.error("Failed to fetch weather data:", err);
         }
     }
+    
+    async function fetchHourlyData(lat: number, lon: number){
+        if(weather.current?.time != '' && weather.current?.time != null){
+            try{
+                const time =weather.current.time.split("T")[0] 
+                const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,weather_code&start_date=${time}&end_date=${time}`;
+                const res = await fetch(url)
+                const data = await res.json()
+                setWeather((prev)=>({
+                    ...prev,
+                    hourlyWeather:{
+                        time:data.hourly.time,
+                        temperature:data.hourly.temperature_2m,
+                        weather_code:data.hourly.weather_code
+                    }
+                }))
 
+            }catch(err){
+                console.log(err)
+            }
+        }
+    }
 
 
     useEffect(()=>{
         fetchWeather(location.lat,location.lon)
     },[location])
     useEffect(()=>{
-        console.log(weather.current)
+        fetchHourlyData(location.lat,location.lon)
+    },[weather.current?.time])
+    
+    useEffect(()=>{
+        console.log(weather)
     },[weather])
-
 
 
     return(
@@ -137,22 +172,12 @@ export default function WeatherBar(){
                 </div>
             </div>
             <div className="hourlyForecast">
-                <div className="daySelector">
                     <p>Hourly forecast</p>
-                    <button onClick={()=>{SetSelector(!toggleSelector)}} className="dropDownbtn days">
-                        <p>{selectedDay}</p>
-                        <img src={dropDownIcon} alt="dropDown-icon" />
-                    </button>
-                    <div className="days_options" style={{display:toggleSelector? 'flex':'none'}}>
-                        <DayButton day={"Monday"} state={selectedDay} callback={selectDay} />
-                        <DayButton day={"Tuesday"} state={selectedDay} callback={selectDay} />
-                        <DayButton day={"Wednesday"} state={selectedDay} callback={selectDay} />
-                        <DayButton day={"Thursday"} state={selectedDay} callback={selectDay} />
-                        <DayButton day={"Friday"} state={selectedDay} callback={selectDay} />
-                        <DayButton day={"Saturday"} state={selectedDay} callback={selectDay} />
-                        <DayButton day={"Sunday"} state={selectedDay} callback={selectDay} />
+                    <div className="hourlyData">
+                        {weather.hourlyWeather.time.map((item,index)=>(
+                            <HourlyWeather key={index} time={item} temp={weather.hourlyWeather.temperature[index]} weather={weather.hourlyWeather.weather_code[index]} />
+                        ))}
                     </div>
-                </div>
             </div>
         </div>
     )
@@ -162,11 +187,7 @@ export default function WeatherBar(){
 
 
 
-function DayButton({day,callback,state}:{day:string,callback:any,state:string}){
-    return(
-        <button  className={`weekDay ${state === day? "selected":""}`} onClick={callback} value={day}>{day}</button>
-    )
-}
+
 
 
 
