@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react"
 import sunny from "../assets/weather/Clear-sunny.png"
 import { useSelector } from "react-redux"
@@ -56,6 +55,8 @@ export default function WeatherBar(){
         }
     })
 
+    const [loading,setLoading] = useState(true)
+
 
 
     const location = useSelector((state:any) => state.location)
@@ -71,6 +72,7 @@ export default function WeatherBar(){
         try {
             const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,temperature_2m_min,weather_code&current=temperature_2m,precipitation,wind_speed_10m,relative_humidity_2m,apparent_temperature&timezone=auto`;
 
+            setLoading(true)
 
             const response = await fetch(url);
            
@@ -95,6 +97,8 @@ export default function WeatherBar(){
             return data;
         } catch (err) { 
             console.error("Failed to fetch weather data:", err);
+        }finally{
+            setLoading(false)
         }
     }
     
@@ -128,17 +132,15 @@ export default function WeatherBar(){
         fetchHourlyData(location.lat,location.lon)
     },[weather.current?.time])
     
-    useEffect(()=>{
-        console.log(weather)
-    },[weather])
+    console.log(loading)
 
 
     return(
         <div className="holder">
             <div className="leftSideInfo">
                 <div className="forecast" >
-                    {weather.current === null ?
-                        <div>loading</div>
+                    {loading === true ?
+                        <div className="loading"></div>
                         :
                         <>
                             <div className="cit_date">
@@ -149,35 +151,49 @@ export default function WeatherBar(){
                                 <img src={sunny} alt="sunny_weather"/>
                                 <p><i>{weather.current!.temperature}</i><sup>o</sup></p>
                             </div>
+                            <img src="src\assets\background\Desktop - Hero bg.svg" alt="" />
                         </>
                     }              
                 </div>
-                <div className="detailedForecast">
-                    <DetailedForecastItem section="Feels Like" data={`${weather.current?.feelsLike}`} />
-                    <DetailedForecastItem section="Humidity" data={`${weather.current?.humidity}%`} />
-                    <DetailedForecastItem section="Wind" data={`${weather.current?.windSpeed} Km/h`} />
-                    <DetailedForecastItem section="Precipitation" data={`${weather.current?.precipitation} mm`} />
-                </div>
+                {loading === true ? 
+                    <div className="detailedForecastLoading"></div>
+                    :
+                    <div className="detailedForecast">
+                        <DetailedForecastItem section="Feels Like" data={`${weather.current?.feelsLike}`} />
+                        <DetailedForecastItem section="Humidity" data={`${weather.current?.humidity}%`} />
+                        <DetailedForecastItem section="Wind" data={`${weather.current?.windSpeed} Km/h`} />
+                        <DetailedForecastItem section="Precipitation" data={`${weather.current?.precipitation} mm`} />
+                    </div>
+
+                }
                 <div className="dailyForecastWrapper">
                     <h1 className="dailyForecastTitle">Daily Forecast</h1>
-                    <div className="dailyForecast">
-                        {weather.daily !== null ? 
-                        weather.daily.time.map((item,index)=>(
-                            <DailyForecastItem key={index} day={item} max={weather.daily!.temperature_2m_max[index]}
-                            min={weather.daily!.temperature_2m_min[index]} code={weather.daily!.weather_code[index]} />
-                        )) 
-                        : 
-                        <div>no info</div>}
-                    </div>
+                    {loading === true? 
+                        <div className="dailyForecastLoading"></div>
+                        :
+                        <div className="dailyForecast">
+                            {weather.daily !== null ? 
+                            weather.daily.time.map((item,index)=>(
+                                <DailyForecastItem key={index} day={item} max={weather.daily!.temperature_2m_max[index]}
+                                min={weather.daily!.temperature_2m_min[index]} code={weather.daily!.weather_code[index]} />
+                            )) 
+                            : 
+                            <div>no info</div>}
+                        </div>
+                    }
                 </div>
             </div>
             <div className="hourlyForecast">
                     <p>Hourly forecast</p>
-                    <div className="hourlyData">
-                        {weather.hourlyWeather.time.map((item,index)=>(
-                            <HourlyWeather key={index} time={item} temp={weather.hourlyWeather.temperature[index]} weather={weather.hourlyWeather.weather_code[index]} />
-                        ))}
-                    </div>
+                    {loading === true ? 
+                        <div className="hourlyForecastLoading"></div>
+                        :
+                        <div className="hourlyData">
+                            {weather.hourlyWeather.time.map((item,index)=>(
+                                <HourlyWeather key={index} time={item} temp={weather.hourlyWeather.temperature[index]} weather={weather.hourlyWeather.weather_code[index]} />
+                            ))}
+                        </div>
+                    }
             </div>
         </div>
     )
